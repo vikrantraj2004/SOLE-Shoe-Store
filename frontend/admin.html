@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel — SOLE.</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .admin-nav {
+      display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 28px;
+    }
+    .admin-tab {
+      padding: 10px 20px;
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      font-weight: 500;
+      border: 1.5px solid var(--border);
+      color: var(--text-secondary);
+      background: var(--surface);
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+    .admin-tab.active {
+      background: var(--black);
+      color: var(--white);
+      border-color: var(--black);
+    }
+
+    .sale-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-md);
+      margin-bottom: 10px;
+      background: var(--surface);
+      gap: 12px;
+      flex-wrap: wrap;
+      transition: border-color var(--transition);
+    }
+    .sale-row.is-active {
+      border-color: var(--gold);
+      background: #FFFDF0;
+    }
+    .active-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--green); box-shadow: 0 0 0 3px var(--green-light);
+      display: inline-block; flex-shrink: 0;
+      animation: pulse 1.5s ease infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 3px var(--green-light); }
+      50%       { box-shadow: 0 0 0 6px rgba(42,122,75,.15); }
+    }
+    .order-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 18px;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .order-row:last-child { border-bottom: none; }
+
+    .progress-bar {
+      height: 4px;
+      background: var(--border);
+      border-radius: 99px;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+    .progress-fill {
+      height: 100%;
+      background: var(--gold);
+      border-radius: 99px;
+      transition: width 300ms ease;
+    }
+    .demo-section {
+      border: 1.5px dashed var(--border);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      background: var(--surface);
+    }
+    .demo-section-title {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 500;
+      margin-bottom: 6px;
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand">SOLE<span>.</span></a>
+    <div class="nav-links">
+      <a href="products.html">← Back to Store</a>
+    </div>
+    <div class="nav-right">
+      <span class="badge badge-gold" style="font-size:11px">Admin Panel</span>
+    </div>
+  </div>
+</nav>
+
+<main class="container page-content">
+  <div style="margin-bottom:36px">
+    <h1 style="font-family:var(--font-display);font-size:2.4rem;margin-bottom:6px">
+      Admin Dashboard
+    </h1>
+    <p class="text-muted">Manage flash sales, monitor orders, and simulate high-write load.</p>
+  </div>
+
+  <!-- Stats Row -->
+  <div class="admin-grid" style="margin-bottom:32px;grid-template-columns:repeat(4,1fr)">
+    <div class="stat-card">
+      <div class="stat-value" id="stat-orders">—</div>
+      <div class="stat-label">Total Orders</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" id="stat-returns">—</div>
+      <div class="stat-label">Return Requests</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" id="stat-sale-status" style="font-size:1.4rem">—</div>
+      <div class="stat-label">Active Sale</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value text-sm" id="stat-sale-ends" style="font-size:1rem;line-height:1.4">—</div>
+      <div class="stat-label">Sale Ends In</div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="admin-nav">
+    <button class="admin-tab active" data-tab="sales">⚡ Flash Sale Control</button>
+    <button class="admin-tab" data-tab="load">🔥 High-Write Load Test</button>
+    <button class="admin-tab" data-tab="orders">📦 Orders</button>
+    <button class="admin-tab" data-tab="returns">↩️ Returns</button>
+  </div>
+
+  <!-- ─────────── TAB: FLASH SALE ─────────── -->
+  <div id="tab-sales">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+      <!-- Create Sale -->
+      <div class="card">
+        <h3 style="font-family:var(--font-display);font-size:1.3rem;margin-bottom:20px">
+          Create New Flash Sale
+        </h3>
+        <div class="form-group">
+          <label class="form-label">Sale Name</label>
+          <input type="text" class="form-input" id="sale-name" value="Weekend Flash Sale"
+                 placeholder="e.g. Weekend Flash Sale" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Discount Percentage</label>
+          <div style="position:relative">
+            <input type="number" class="form-input" id="sale-discount" value="20"
+                   min="1" max="90" style="padding-right:36px" />
+            <span style="position:absolute;right:14px;top:50%;transform:translateY(-50%);
+                         color:var(--text-muted);font-weight:600">%</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Duration</label>
+          <select class="form-select" id="sale-duration">
+            <option value="10">10 minutes (demo)</option>
+            <option value="30" selected>30 minutes</option>
+            <option value="60">1 hour</option>
+            <option value="120">2 hours</option>
+            <option value="1440">24 hours</option>
+          </select>
+        </div>
+        <button class="btn btn-primary btn-block" id="create-sale-btn">
+          ⚡ Launch Flash Sale
+        </button>
+      </div>
+
+      <!-- Active Sales -->
+      <div class="card">
+        <h3 style="font-family:var(--font-display);font-size:1.3rem;margin-bottom:20px">
+          Sale Events
+        </h3>
+        <div id="sales-list">
+          <div class="page-loader" style="padding:32px 0"><div class="spinner"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─────────── TAB: LOAD TEST ─────────── -->
+  <div id="tab-load" class="hidden">
+    <div class="demo-section" style="margin-bottom:24px">
+      <div class="demo-section-title">⚡ High-Write Load Simulator</div>
+      <p class="text-muted" style="font-size:14px;margin-bottom:20px">
+        This simulates a flash sale scenario where multiple concurrent users attempt to
+        purchase the same limited-stock variant simultaneously. The backend uses
+        <code style="background:var(--bg);padding:2px 6px;border-radius:4px;font-size:12px">UPDATE ... WHERE stock >= qty</code>
+        inside an InnoDB transaction to prevent overselling — only one request wins per
+        available unit of stock.
+      </p>
+
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px">
+        <div class="form-group" style="margin:0">
+          <label class="form-label">Concurrent Requests</label>
+          <select class="form-select" id="load-concurrency">
+            <option value="5">5 requests</option>
+            <option value="10" selected>10 requests</option>
+            <option value="20">20 requests</option>
+            <option value="50">50 requests</option>
+          </select>
+        </div>
+        <div class="form-group" style="margin:0">
+          <label class="form-label">Target Variant (Product ID)</label>
+          <input type="number" class="form-input" id="load-product-id" value="1" min="1" max="8" />
+        </div>
+        <div class="form-group" style="margin:0">
+          <label class="form-label">Size (EU)</label>
+          <select class="form-select" id="load-size">
+            <option value="42" selected>42</option>
+            <option value="41">41</option>
+            <option value="43">43</option>
+            <option value="44">44</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn btn-primary" id="run-load-test-btn">
+          🔥 Run Load Test
+        </button>
+        <button class="btn btn-ghost" id="clear-log-btn">Clear Log</button>
+        <button class="btn btn-outline" id="check-stock-btn">Check Current Stock</button>
+      </div>
+    </div>
+
+    <!-- Progress -->
+    <div class="hidden" id="load-progress-box" style="margin-bottom:16px">
+      <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px">
+        <span>Sending requests…</span>
+        <span id="load-progress-label">0 / 0</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="load-progress-fill" style="width:0%"></div>
+      </div>
+    </div>
+
+    <!-- Summary -->
+    <div class="hidden" id="load-summary"
+         style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px">
+      <div class="stat-card" style="padding:16px 20px">
+        <div class="stat-value text-green" id="load-success-count">0</div>
+        <div class="stat-label">Orders Created</div>
+      </div>
+      <div class="stat-card" style="padding:16px 20px">
+        <div class="stat-value text-red" id="load-fail-count">0</div>
+        <div class="stat-label">Stock Conflicts</div>
+      </div>
+      <div class="stat-card" style="padding:16px 20px">
+        <div class="stat-value" id="load-total-count">0</div>
+        <div class="stat-label">Total Requests</div>
+      </div>
+      <div class="stat-card" style="padding:16px 20px">
+        <div class="stat-value" id="load-time">—</div>
+        <div class="stat-label">Duration (ms)</div>
+      </div>
+    </div>
+
+    <!-- Log Output -->
+    <div class="load-test-results" id="load-log">
+      <span class="log-info">// Load test results will appear here.</span><br>
+      <span class="log-info">// Start by launching a Flash Sale, then run the test.</span>
+    </div>
+  </div>
+
+  <!-- ─────────── TAB: ORDERS ─────────── -->
+  <div id="tab-orders" class="hidden">
+    <div class="card" style="padding:0">
+      <div style="padding:20px 24px;border-bottom:1px solid var(--border);
+                  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+        <h3 style="font-family:var(--font-display);font-size:1.2rem">All Orders</h3>
+        <button class="btn btn-ghost btn-sm" onclick="loadAdminOrders()">↻ Refresh</button>
+      </div>
+      <div id="admin-orders-list">
+        <div class="page-loader"><div class="spinner"></div></div>
+      </div>
+    </div>
+
+    <div style="margin-top:16px;padding:14px 18px;background:var(--bg);border-radius:var(--radius-md);
+                font-size:13px;color:var(--text-secondary)">
+      💡 <strong>Advance status</strong> to simulate delivery progression — useful for testing the returns flow.
+    </div>
+  </div>
+
+  <!-- ─────────── TAB: RETURNS ─────────── -->
+  <div id="tab-returns" class="hidden">
+    <div class="card" style="padding:0">
+      <div style="padding:20px 24px;border-bottom:1px solid var(--border);
+                  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+        <h3 style="font-family:var(--font-display);font-size:1.2rem">Return Requests</h3>
+        <button class="btn btn-ghost btn-sm" onclick="loadAdminReturns()">↻ Refresh</button>
+      </div>
+      <div id="admin-returns-list">
+        <div class="page-loader"><div class="spinner"></div></div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<div id="toast-container"></div>
+
+<script src="js/cart.js"></script>
+<script src="js/api.js"></script>
+<script src="js/pages/admin.js"></script>
+</body>
+</html>

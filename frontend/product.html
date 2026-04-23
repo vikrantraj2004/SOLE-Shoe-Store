@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Product — SOLE.</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<div class="sale-banner" id="sale-banner">
+  <span>⚡ Flash Sale Live</span>
+  <span class="discount-badge" id="sale-pct-banner">—% OFF</span>
+  <span>Ends in</span>
+  <span class="sale-countdown" id="banner-countdown">--:--:--</span>
+</div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand">SOLE<span>.</span></a>
+    <div class="nav-links">
+      <a href="products.html?gender=women">Women</a>
+      <a href="products.html?gender=men">Men</a>
+      <a href="products.html">All Shoes</a>
+      <a href="products.html?sale=true" class="sale-link">Sale</a>
+    </div>
+    <div class="nav-right">
+      <a href="orders.html" class="nav-icon-btn" title="My Orders">
+        <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg>
+      </a>
+      <a href="cart.html" class="nav-icon-btn" style="position:relative">
+        <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        <span class="cart-badge" id="cart-badge" style="display:none">0</span>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<main class="container page-content" id="product-page">
+  <!-- Loading state -->
+  <div class="page-loader" id="loader">
+    <div class="spinner"></div>
+  </div>
+
+  <!-- Product content (hidden until loaded) -->
+  <div id="product-content" class="hidden">
+    <div class="breadcrumb">
+      <a href="index.html">Home</a>
+      <span class="sep">›</span>
+      <a href="products.html">Shoes</a>
+      <span class="sep">›</span>
+      <span class="current" id="bc-brand">—</span>
+    </div>
+
+    <div class="product-detail-grid">
+      <!-- Gallery -->
+      <div class="gallery">
+        <div class="gallery-main">
+          <img id="main-image" src="" alt="" />
+        </div>
+        <div class="gallery-thumbs" id="gallery-thumbs">
+          <!-- Injected -->
+        </div>
+      </div>
+
+      <!-- Product Info -->
+      <div class="product-info">
+        <div class="product-detail-brand">
+          <span id="detail-brand">—</span>
+          <span class="text-muted" style="font-weight:400;text-transform:none;letter-spacing:0" id="detail-sku">—</span>
+        </div>
+
+        <h1 class="product-detail-name" id="detail-name">—</h1>
+
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px">
+          <span class="stars">★★★★<span class="empty">★</span></span>
+          <span class="text-sm text-muted">4.2 · 38 reviews</span>
+        </div>
+
+        <!-- Price -->
+        <div class="product-detail-price">
+          <span class="price-big" id="detail-price-current">—</span>
+          <span class="price-original hidden" id="detail-price-original"></span>
+          <span class="sale-pct-badge hidden" id="detail-sale-badge"></span>
+        </div>
+
+        <!-- Sale notice -->
+        <div class="hidden" id="sale-notice"
+             style="background:var(--red-light);border:1px solid rgba(214,64,51,.15);
+                    border-radius:var(--radius-md);padding:10px 14px;
+                    font-size:13px;color:var(--red);margin-bottom:20px;display:flex;gap:8px;align-items:center">
+          ⚡ <span>Flash Sale active — <strong id="sale-notice-pct"></strong> off all styles!</span>
+        </div>
+
+        <hr class="divider">
+
+        <!-- Color Selector -->
+        <div>
+          <div class="section-label">Color &nbsp;<span id="selected-color" class="font-medium" style="text-transform:none;color:var(--text-primary)"></span></div>
+          <div class="color-options" id="color-options"><!-- JS --></div>
+        </div>
+
+        <!-- Size Selector -->
+        <div style="margin-top:20px">
+          <div class="section-label" style="display:flex;justify-content:space-between">
+            <span>Size <span style="text-transform:none;font-weight:400;color:var(--text-secondary)">EU</span></span>
+            <a href="#" class="text-sm" style="text-decoration:underline;color:var(--text-muted);text-transform:none;font-weight:400">Size guide</a>
+          </div>
+          <div class="size-grid" id="size-grid"><!-- JS --></div>
+        </div>
+
+        <!-- Stock -->
+        <div style="margin-top:12px;min-height:20px">
+          <span class="stock-indicator" id="stock-indicator"></span>
+        </div>
+
+        <!-- Add to Cart -->
+        <div style="display:flex;gap:10px;margin-top:20px">
+          <button class="btn btn-primary btn-lg" style="flex:1" id="add-to-cart-btn" disabled>
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+            Add to Cart
+          </button>
+          <button class="icon-btn" id="wishlist-btn" title="Save">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+          </button>
+        </div>
+
+        <!-- Delivery note -->
+        <div style="margin-top:14px;font-size:13px;color:var(--text-muted);display:flex;align-items:center;gap:8px">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+          Free delivery on orders over $30.00
+        </div>
+
+        <hr class="divider">
+
+        <!-- Description -->
+        <p class="text-sm" style="color:var(--text-secondary);line-height:1.7" id="detail-description"></p>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer style="border-top:1px solid var(--border);padding:24px 0;margin-top:40px">
+  <div class="container" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px">
+    <span class="nav-brand">SOLE<span>.</span></span>
+    <a href="admin.html" class="text-sm text-muted">Admin Panel</a>
+  </div>
+</footer>
+
+<div id="toast-container"></div>
+
+<script src="js/cart.js"></script>
+<script src="js/api.js"></script>
+<script src="js/pages/product.js"></script>
+</body>
+</html>

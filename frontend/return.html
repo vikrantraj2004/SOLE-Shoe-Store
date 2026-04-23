@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Return Request — SOLE.</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand">SOLE<span>.</span></a>
+    <div class="nav-links">
+      <a href="products.html">Shop</a>
+      <a href="orders.html">My Orders</a>
+    </div>
+    <div class="nav-right">
+      <a href="orders.html" class="nav-icon-btn">
+        <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg>
+      </a>
+      <a href="cart.html" class="nav-icon-btn" style="position:relative">
+        <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        <span class="cart-badge" id="cart-badge" style="display:none">0</span>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<main class="container page-content" style="max-width:680px">
+  <div class="breadcrumb">
+    <a href="index.html">Home</a>
+    <span class="sep">›</span>
+    <a href="orders.html">My Orders</a>
+    <span class="sep">›</span>
+    <span class="current">Return Request</span>
+  </div>
+
+  <div class="page-loader" id="loader"><div class="spinner"></div></div>
+
+  <!-- Error / blocked state -->
+  <div class="hidden" id="blocked-state">
+    <div class="card" style="text-align:center;padding:48px 32px">
+      <div style="font-size:40px;margin-bottom:16px">🚫</div>
+      <h2 style="font-family:var(--font-display);margin-bottom:12px" id="blocked-title">Cannot Process Return</h2>
+      <p class="text-muted" id="blocked-msg"></p>
+      <a href="orders.html" class="btn btn-primary mt-24">Back to Orders</a>
+    </div>
+  </div>
+
+  <!-- Already returned state -->
+  <div class="hidden" id="already-returned">
+    <div class="card" style="text-align:center;padding:48px 32px">
+      <div style="font-size:40px;margin-bottom:16px">✅</div>
+      <h2 style="font-family:var(--font-display);margin-bottom:12px">Return Already Submitted</h2>
+      <div style="background:var(--bg);border-radius:var(--radius-md);padding:16px;margin:20px 0;text-align:left">
+        <div class="text-sm text-muted">Return Status</div>
+        <div id="existing-return-status"></div>
+        <div class="text-sm text-muted mt-8">Reason</div>
+        <div id="existing-return-reason" class="font-medium"></div>
+      </div>
+      <a href="orders.html" class="btn btn-outline">Back to Orders</a>
+    </div>
+  </div>
+
+  <!-- Return Form -->
+  <div class="hidden" id="return-form-content">
+    <h1 style="font-family:var(--font-display);font-size:2rem;margin-bottom:8px">Request a Return</h1>
+    <p class="text-muted" style="margin-bottom:32px">
+      Returns are accepted within 7 days of delivery for whole orders.
+    </p>
+
+    <!-- Order Summary Card -->
+    <div class="card card-sm" style="margin-bottom:24px">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:14px">
+        <div>
+          <span class="text-sm text-muted">Order</span>
+          <strong style="margin-left:6px" id="return-order-id">#—</strong>
+        </div>
+        <div id="return-status-badge"></div>
+      </div>
+
+      <div id="return-items-list"></div>
+
+      <hr class="divider" style="margin:14px 0">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <span class="text-sm text-muted">Order Total</span>
+        <strong id="return-order-total"></strong>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px">
+        <span class="text-sm text-muted">Days since order</span>
+        <span class="text-sm" id="days-since" style="font-weight:500"></span>
+      </div>
+    </div>
+
+    <!-- Return Reason Form -->
+    <div class="card">
+      <h3 style="font-family:var(--font-display);margin-bottom:20px">Return Details</h3>
+
+      <div class="form-group">
+        <label class="form-label">Reason for Return</label>
+        <select class="form-select" id="return-reason">
+          <option value="">— Select a reason —</option>
+          <option value="wrong_size">Wrong size</option>
+          <option value="defective">Defective / damaged item</option>
+          <option value="changed_mind">Changed my mind</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Additional Notes <span class="text-muted">(optional)</span></label>
+        <textarea class="form-textarea" id="return-notes"
+                  placeholder="Describe the issue in more detail…"></textarea>
+      </div>
+
+      <div style="background:var(--bg);border-radius:var(--radius-md);padding:14px;
+                  font-size:13px;color:var(--text-secondary);margin-bottom:20px;
+                  display:flex;gap:8px">
+        <span>ℹ️</span>
+        <span>This will initiate a return for the <strong>entire order</strong>.
+        You'll receive a confirmation once our team reviews your request (1–2 business days).</span>
+      </div>
+
+      <div style="display:flex;gap:10px">
+        <a href="orders.html" class="btn btn-ghost" style="flex:1">Cancel</a>
+        <button class="btn btn-danger" style="flex:2" id="submit-return-btn">
+          Submit Return Request
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Success state -->
+  <div class="hidden" id="success-state">
+    <div class="card" style="text-align:center;padding:52px 32px">
+      <div class="check-circle" style="margin:0 auto 20px">✓</div>
+      <h2 style="font-family:var(--font-display);font-size:1.8rem;margin-bottom:10px">Return Requested!</h2>
+      <p class="text-muted">We've received your return request for <strong id="success-order-id"></strong>.
+      Our team will review it and get back to you within 1–2 business days.</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:28px">
+        <a href="orders.html" class="btn btn-primary">My Orders</a>
+        <a href="products.html" class="btn btn-outline">Continue Shopping</a>
+      </div>
+    </div>
+  </div>
+</main>
+
+<div id="toast-container"></div>
+
+<script src="js/cart.js"></script>
+<script src="js/api.js"></script>
+<script src="js/pages/return.js"></script>
+</body>
+</html>

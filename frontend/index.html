@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SOLE. — Premium Footwear</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<!-- Sale Banner -->
+<div class="sale-banner" id="sale-banner">
+  <span>⚡ Flash Sale Live</span>
+  <span class="discount-badge" id="sale-pct-banner">—% OFF</span>
+  <span>Ends in</span>
+  <span class="sale-countdown" id="banner-countdown">--:--:--</span>
+  <a href="products.html" class="btn btn-sm" style="background:var(--gold);color:var(--black);margin-left:8px">Shop Now</a>
+</div>
+
+<!-- Nav -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand">SOLE<span>.</span></a>
+    <div class="nav-links">
+      <a href="products.html?gender=women">Women</a>
+      <a href="products.html?gender=men">Men</a>
+      <a href="products.html">All Shoes</a>
+      <a href="products.html?brand=Nike">Brands</a>
+      <a href="products.html?sale=true" class="sale-link">Sale</a>
+    </div>
+    <div class="nav-right">
+      <a href="orders.html" class="nav-icon-btn" title="My Orders">
+        <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg>
+      </a>
+      <a href="cart.html" class="nav-icon-btn" title="Cart" style="position:relative">
+        <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        <span class="cart-badge" id="cart-badge" style="display:none">0</span>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero" id="hero">
+  <div style="position:relative;z-index:1">
+    <div class="hero-tag">New Season · 2025</div>
+    <h1 class="hero-title">Every step,<br><em>perfectly</em> placed.</h1>
+    <p class="hero-sub">Premium footwear from the world's best brands. Find your fit.</p>
+
+    <!-- Live sale info (shown only when sale is active) -->
+    <div class="hero-sale-info hidden" id="hero-sale-box">
+      <span class="sale-countdown" id="hero-countdown">--:--:--</span>
+      <span style="color:rgba(255,255,255,.5)">|</span>
+      <span id="hero-sale-label">Flash Sale</span>
+      <span class="discount-badge" id="hero-pct" style="background:var(--gold);color:var(--black)">— % OFF</span>
+    </div>
+
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+      <a href="products.html" class="btn btn-lg" style="background:var(--white);color:var(--black)">Shop All Shoes</a>
+      <a href="products.html?sale=true" class="btn btn-lg" style="background:transparent;color:var(--white);border:1.5px solid rgba(255,255,255,.35)" id="sale-cta">View Sale</a>
+    </div>
+  </div>
+</section>
+
+<!-- Featured Products -->
+<main class="container page-content">
+  <div class="section-header">
+    <h2 class="section-title">Featured Picks</h2>
+    <a href="products.html" class="text-sm text-muted" style="margin-left:auto">View all →</a>
+  </div>
+
+  <div class="product-grid" id="featured-grid">
+    <!-- Injected by JS -->
+    <div class="page-loader" style="grid-column:1/-1">
+      <div class="spinner"></div>
+    </div>
+  </div>
+
+  <!-- Brands strip -->
+  <div style="margin-top:64px">
+    <p class="section-label" style="text-align:center;margin-bottom:28px">Brands we carry</p>
+    <div style="display:flex;gap:32px;flex-wrap:wrap;justify-content:center;align-items:center">
+      <span id="brands-list" class="text-muted" style="font-size:14px;display:flex;gap:32px;flex-wrap:wrap;justify-content:center"></span>
+    </div>
+  </div>
+</main>
+
+<!-- Footer -->
+<footer style="border-top:1px solid var(--border);padding:32px 0;margin-top:40px">
+  <div class="container" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px">
+    <span class="nav-brand">SOLE<span>.</span></span>
+    <span class="text-sm text-muted">© 2025 SOLE. All rights reserved.</span>
+    <a href="admin.html" class="text-sm text-muted">Admin Panel</a>
+  </div>
+</footer>
+
+<div id="toast-container"></div>
+
+<script src="js/cart.js"></script>
+<script src="js/api.js"></script>
+<script src="js/pages/index.js"></script>
+</body>
+</html>
